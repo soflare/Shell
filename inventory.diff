@@ -1,0 +1,427 @@
+commit 49c5cac2b1d827233dbd6c014f16d837b11af892
+Author: Zhenyu Liang <xwebview@sofla.re>
+Date:   Mon Jun 8 03:27:53 2015 +0800
+
+    WIP
+
+diff --git a/XWebView.xcodeproj/project.pbxproj b/XWebView.xcodeproj/project.pbxproj
+index 0b851db..e033486 100644
+--- a/XWebView.xcodeproj/project.pbxproj
++++ b/XWebView.xcodeproj/project.pbxproj
+@@ -36,6 +36,7 @@
+ 		EE7164911A716C9F00078FF9 /* XWVHttpServer.h in Headers */ = {isa = PBXBuildFile; fileRef = EE71648D1A716C9F00078FF9 /* XWVHttpServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+ 		EE7164921A716C9F00078FF9 /* XWVHttpServer.m in Sources */ = {isa = PBXBuildFile; fileRef = EE71648E1A716C9F00078FF9 /* XWVHttpServer.m */; };
+ 		EE7886761A0D0CE30013A855 /* XWVLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7886751A0D0CE30013A855 /* XWVLoader.swift */; };
++		EE7B4EF71B20AE32001A74F2 /* XWVFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE7B4EF61B20AE32001A74F2 /* XWVFactory.swift */; };
+ 		EEE6F9A41AE02CF100A2EC89 /* XWVScripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE6F9A31AE02CF100A2EC89 /* XWVScripting.swift */; };
+ 		EEE6F9A61AE02E8600A2EC89 /* XWVObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE6F9A51AE02E8600A2EC89 /* XWVObject.swift */; };
+ 		EEE6F9A81AE02F5000A2EC89 /* XWVScriptPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEE6F9A71AE02F5000A2EC89 /* XWVScriptPlugin.swift */; };
+@@ -99,6 +100,7 @@
+ 		EE71648D1A716C9F00078FF9 /* XWVHttpServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XWVHttpServer.h; path = XWebView/XWVHttpServer.h; sourceTree = "<group>"; };
+ 		EE71648E1A716C9F00078FF9 /* XWVHttpServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XWVHttpServer.m; path = XWebView/XWVHttpServer.m; sourceTree = "<group>"; };
+ 		EE7886751A0D0CE30013A855 /* XWVLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVLoader.swift; path = XWebView/XWVLoader.swift; sourceTree = "<group>"; };
++		EE7B4EF61B20AE32001A74F2 /* XWVFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVFactory.swift; path = XWebView/XWVFactory.swift; sourceTree = "<group>"; };
+ 		EEE6F9A31AE02CF100A2EC89 /* XWVScripting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVScripting.swift; path = XWebView/XWVScripting.swift; sourceTree = "<group>"; };
+ 		EEE6F9A51AE02E8600A2EC89 /* XWVObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVObject.swift; path = XWebView/XWVObject.swift; sourceTree = "<group>"; };
+ 		EEE6F9A71AE02F5000A2EC89 /* XWVScriptPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVScriptPlugin.swift; path = XWebView/XWVScriptPlugin.swift; sourceTree = "<group>"; };
+@@ -194,6 +196,7 @@
+ 				EE33793D1AE56875009124A4 /* XWVScriptObject.swift */,
+ 				EEE6F9A71AE02F5000A2EC89 /* XWVScriptPlugin.swift */,
+ 				EE62683819FA323900EFC3F8 /* Supporting Files */,
++				EE7B4EF61B20AE32001A74F2 /* XWVFactory.swift */,
+ 			);
+ 			name = XWebView;
+ 			sourceTree = SOURCE_ROOT;
+@@ -346,6 +349,7 @@
+ 				EEE6F9A81AE02F5000A2EC89 /* XWVScriptPlugin.swift in Sources */,
+ 				EE7164921A716C9F00078FF9 /* XWVHttpServer.m in Sources */,
+ 				EEE6F9A61AE02E8600A2EC89 /* XWVObject.swift in Sources */,
++				EE7B4EF71B20AE32001A74F2 /* XWVFactory.swift in Sources */,
+ 				EE62692419FA52FC00EFC3F8 /* XWVInvocation.m in Sources */,
+ 				EE33793E1AE56875009124A4 /* XWVScriptObject.swift in Sources */,
+ 				EE0A1DD31A52775400C9E6D3 /* XWVChannel.swift in Sources */,
+diff --git a/XWebView/XWVFactory.swift b/XWebView/XWVFactory.swift
+new file mode 100644
+index 0000000..1553a01
+--- /dev/null
++++ b/XWebView/XWVFactory.swift
+@@ -0,0 +1,24 @@
++/*
++ Copyright 2015 XWebView
++
++ Licensed under the Apache License, Version 2.0 (the "License");
++ you may not use this file except in compliance with the License.
++ You may obtain a copy of the License at
++
++ http://www.apache.org/licenses/LICENSE-2.0
++
++ Unless required by applicable law or agreed to in writing, software
++ distributed under the License is distributed on an "AS IS" BASIS,
++ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ See the License for the specific language governing permissions and
++ limitations under the License.
++*/
++
++@objc public protocol XWVFactory {
++    static func createInstance() -> AnyObject!
++    optional static func createInstanceWithArgument(argument: AnyObject!) -> AnyObject!
++}
++
++@objc public protocol XWVSingleton {
++    static var instance: AnyObject! { get }
++}
+diff --git a/XWebView/XWVInventory.swift b/XWebView/XWVInventory.swift
+index fee875b..55e14fb 100644
+--- a/XWebView/XWVInventory.swift
++++ b/XWebView/XWVInventory.swift
+@@ -17,22 +17,22 @@
+ import Foundation
+ 
+ @objc public class XWVInventory {
+-    private struct Provider {
+-        let bundle: NSBundle
+-        let className: String
++    private enum Provider {
++        case Class(AnyClass?)
++        case RealID(String)
+     }
+     private var plugins = [String: Provider]()
+ 
+     public init() {
+     }
+     public init(directory: String) {
+-        scanPlugin(inDirectory: directory)
++        scanInDirectory(directory)
+     }
+     public init(bundle: NSBundle) {
+-        scanPlugin(inBundle: bundle)
++        scanInBundle(bundle)
+     }
+ 
+-    public func scanPlugin(inDirectory directory: String) -> Bool {
++    public func scanInDirectory(directory: String) {
+         let fm = NSFileManager.defaultManager()
+         if fm.fileExistsAtPath(directory) == true {
+             for i in fm.contentsOfDirectoryAtPath(directory, error: nil)! {
+@@ -40,76 +40,124 @@ import Foundation
+                 if name.pathExtension == "framework" {
+                     let bundlePath = directory.stringByAppendingPathComponent(name)
+                     if let bundle = NSBundle(path: bundlePath) {
+-                        scanPlugin(inBundle: bundle)
++                        scanInBundle(bundle)
+                     }
+                 }
+             }
+-            return true
+         }
+-        return false
+     }
+ 
+-    public func scanPlugin(inBundle bundle: NSBundle) -> Bool {
+-        if let info = bundle.objectForInfoDictionaryKey("XWebViewPlugins") as? NSDictionary {
+-            let e = info.keyEnumerator()
+-            while let namespace = e.nextObject() as? String {
+-                if let className = info[namespace] as? String {
+-                    if plugins[namespace] == nil {
+-                        plugins[namespace] = Provider(bundle: bundle, className: className)
+-                    } else {
+-                        println("WARNING: namespace '\(namespace)' conflicts")
+-                    }
+-                } else {
+-                    println("WARNING: bad class name '\(info[namespace])'")
++    public func scanInBundle(bundle: NSBundle) {
++        if let xwvplugins = bundle.objectForInfoDictionaryKey("XWVPlugins") as? NSDictionary {
++            let e = xwvplugins.keyEnumerator()
++            while let name = e.nextObject() as? String {
++                let id = XWVInventory.identiferForClassName(name, bundle: bundle)
++                plugins[id] = .Class(nil)  // lazy load
++                if let alias = xwvplugins[name] as? String where !alias.isEmpty {
++                    let aid = XWVInventory.identiferForClassName(alias, bundle: bundle)
++                    plugins[aid] = .RealID(id)
+                 }
+             }
+-            return true
+         }
+-        return false
+     }
+ 
+-    public func registerPlugin(plugin: AnyClass, namespace: String) -> Bool {
+-        if plugins[namespace] == nil {
+-            let bundle = NSBundle(forClass: plugin)
+-            var className = plugin.description()
+-            className = className.pathExtension.isEmpty ? className : className.pathExtension
+-            plugins[namespace] = Provider(bundle: bundle, className: className)
+-            return true
++    class public func identifierForClass(cls: AnyClass) -> String {
++        return identiferForClassName(cls.description(), bundle: NSBundle(forClass: cls))
++    }
++    class private func identiferForClassName(name: String, bundle: NSBundle) -> String {
++        var id = name
++        if let dot = find(id, ".") {
++            id = id.substringFromIndex(dot.successor())
++        }
++        if bundle == NSBundle.mainBundle() {
++            return id
++        }
++        if let bundleId = bundle.bundleIdentifier {
++            return id + "@" + ".".join(reverse(split(bundleId) {
++                (c: Character)->Bool in return c == "."
++            }))
++        }
++        preconditionFailure("Bundle '\(bundle.bundlePath)' has no identifier")
++    }
++
++    public func registerClass(cls: AnyClass) -> AnyClass! {
++        return registerClass(cls, forIdentifier: XWVInventory.identifierForClass(cls))
++    }
++    public func registerClass(cls: AnyClass, forIdentifier id: String) -> AnyClass! {
++        let old: AnyClass? = classForIdentifier(id)
++        plugins[id] = .Class(cls)
++        return old
++    }
++    public func unregisterIdentifier(id: String) {
++        plugins.removeValueForKey(id)
++    }
++
++    public func classForIdentifier(id: String) -> AnyClass? {
++        if let provider = plugins[id] {
++            switch provider {
++                case .Class(let cls):
++                    return cls ?? resolveIdentifier(id)
++                case .RealID(let rid):
++                    return classForIdentifier(rid)
++            }
+         }
+-        return false
++        return nil
+     }
+ 
+-    public func plugin(forNamespace namespace: String) -> AnyClass? {
+-        if let provider = plugins[namespace] {
+-            // Load bundle
+-            if !provider.bundle.loaded {
+-                var error: NSError?
+-                if !provider.bundle.loadAndReturnError(&error) {
+-                    println("ERROR: load bundle '\(provider.bundle.bundlePath)' failed")
++    private func resolveIdentifier(id: String) -> AnyClass? {
++        let className: String
++        let bundle: NSBundle!
++        if let at = find(id, "@") {
++            className = id[id.startIndex..<at]
++            let domain = id[at.successor()..<id.endIndex]
++            let bundleId = ".".join(reverse(split(domain) { (c: Character)->Bool in return c == "." }))
++            bundle = NSBundle(identifier: bundleId)
++            if bundle == nil {
++                println("ERROR: unknown bundle '\(bundleId)'")
++                return nil
++            } else if !bundle.loaded {
++                if !bundle.loadAndReturnError(nil) {
++                    println("ERROR: load bundle '\(bundle.bundlePath)' failed")
+                     return nil
+                 }
+             }
++        } else {
++            className = id
++            bundle = NSBundle.mainBundle()
++        }
+ 
+-            var cls: AnyClass? = provider.bundle.classNamed(provider.className)
+-            if cls != nil {
+-                // FIXME: Never reach here because the bundle in build directory was loaded in simulator.
+-                return cls
+-            }
+-            // FIXME: workaround the problem
+-            // Try to get the class with the barely class name (for objective-c written class)
+-            cls = NSClassFromString(provider.className)
+-            if cls == nil {
+-                // Try to get the class with its framework name as prefix (for classes written in Swift)
+-                let swiftClassName = (provider.bundle.executablePath?.lastPathComponent)! + "." + provider.className
+-                cls = NSClassFromString(swiftClassName)
+-            }
++        func classForName(name: String, bundle: NSBundle) -> AnyClass? {
++            #if TARGET_IPHONE_SIMULATOR
++            return NSClassFromString(name)
++            #else
++            return bundle.classNamed(name)
++            #endif
++        }
++        var cls: AnyClass? = classForName(className, bundle)
++        if cls == nil {
++            // Try to get the Swift class
++            let swiftClassName = bundle.executablePath!.lastPathComponent + "." + className
++            cls = classForName(swiftClassName, bundle)
+             if cls == nil {
+-                println("ERROR: plugin class '\(provider.className)' not found in bundle '\(provider.bundle.bundlePath)'")
++                println("ERROR: plugin class '\(className)' not found in bundle '\(bundle.bundlePath)'")
+                 return nil;
+             }
+-            return cls
+         }
+-        println("ERROR: namespace '\(namespace)' has no registered plugin class")
+-        return nil
++        return cls
++    }
++}
++
++extension XWVInventory {
++    public subscript(id: String) -> AnyClass? {
++        get {
++            return classForIdentifier(id)
++        }
++        set {
++            if newValue != nil {
++                registerClass(newValue!, forIdentifier: id)
++            } else {
++                unregisterIdentifier(id)
++            }
++        }
+     }
+ }
+diff --git a/XWebView/XWVLoader.swift b/XWebView/XWVLoader.swift
+index d27c19f..edbe0a3 100644
+--- a/XWebView/XWVLoader.swift
++++ b/XWebView/XWVLoader.swift
+@@ -15,32 +15,56 @@
+ */
+ 
+ import Foundation
++import ObjectiveC
+ 
+ public class XWVLoader: NSObject, XWVScripting {
+-    private let _inventory: XWVInventory
++    private let inventory: XWVInventory
+ 
+     public init(inventory: XWVInventory) {
+-        self._inventory = inventory
++        self.inventory = inventory
+         super.init()
+     }
+ 
+-    func defaultMethod(namespace: String, argument: AnyObject?, _Promise: XWVScriptObject) {
+-        if let plugin: AnyClass = _inventory.plugin(forNamespace: namespace), let channel = scriptObject?.channel {
+-            let initializer = Selector(argument == nil ? "init" : "initWitArgument:")
+-            let args: [AnyObject]? = argument == nil ? nil : [argument!]
+-            let object = XWVInvocation.constructOnThread(channel.thread, `class`: plugin, initializer: initializer, arguments: args) as! NSObject!
+-            if object != nil, let obj = channel.webView?.loadPlugin(object, namespace: namespace) {
+-                _Promise.callMethod("resolve", withArguments: [obj], resultHandler: nil)
+-                return
++    func loadPlugin(id: String, namespace: String, argument: AnyObject?, _Promise: XWVScriptObject) {
++        if let plugin: AnyClass = inventory[id], let channel = scriptObject?.channel {
++            if let object = instantiateClass(plugin, withArgument: argument) as? NSObject {
++                if let obj = channel.webView?.loadPlugin(object, namespace: namespace) {
++                    _Promise.callMethod("resolve", withArguments: [obj], resultHandler: nil)
++                    return
++                }
+             }
+         }
+         _Promise.callMethod("reject", withArguments: nil, resultHandler: nil)
+     }
+ 
++    func instantiateClass(cls: AnyClass, withArgument argument: AnyObject?) -> AnyObject? {
++        XWVFactory.self  // a trick to access static method of protocol
++        if class_conformsToProtocol(cls, XWVSingleton.self) {
++            return cls.instance
++        } else if class_conformsToProtocol(cls, XWVFactory.self) {
++            if argument != nil && cls.createInstanceWithArgument != nil {
++                return cls.createInstanceWithArgument!(argument)
++            }
++            return cls.createInstance()
++        }
++
++        var initializer = Selector("initWitArgument:")
++        var args: [AnyObject]? = nil
++        if cls.instancesRespondToSelector(initializer) && argument != nil {
++            args = [argument!]
++        } else {
++            initializer = Selector("init")
++            if !cls.instancesRespondToSelector(initializer) {
++                return cls as AnyObject
++            }
++        }
++        return XWVInvocation.construct(cls, initializer: initializer, arguments: args)
++    }
++
+     public class func isSelectorForDefaultMethod(selector: Selector) -> Bool {
+-        return selector == Selector("defaultMethod:argument:_Promise:")
++        return selector == Selector("loadPlugin:namespace:argument:_Promise:")
+     }
+     public class func isSelectorExcludedFromScript(selector: Selector) -> Bool {
+-        return selector != Selector("defaultMethod:argument:_Promise:")
++        return !isSelectorForDefaultMethod(selector)
+     }
+ }
+diff --git a/XWebViewTests/Info.plist b/XWebViewTests/Info.plist
+index 0d99bb8..1036b6c 100644
+--- a/XWebViewTests/Info.plist
++++ b/XWebViewTests/Info.plist
+@@ -2,6 +2,11 @@
+ <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+ <plist version="1.0">
+ <dict>
++	<key>XWVPlugins</key>
++	<dict>
++		<key>XWVInventoryTest</key>
++		<string>InventoryTest</string>
++	</dict>
+ 	<key>CFBundleDevelopmentRegion</key>
+ 	<string>en</string>
+ 	<key>CFBundleExecutable</key>
+diff --git a/XWebViewTests/XWVInventoryTest.swift b/XWebViewTests/XWVInventoryTest.swift
+index f007f1d..16a8ef9 100644
+--- a/XWebViewTests/XWVInventoryTest.swift
++++ b/XWebViewTests/XWVInventoryTest.swift
+@@ -20,20 +20,29 @@ import XWebView
+ class XWVInventoryTest: XCTestCase {
+     class Plugin : NSObject {
+     }
++    let id = XWVInventory.identifierForClass(Plugin.self)
+     let namespace = "xwvtest.inventory"
+     let inventory = XWVInventory()
+ 
+     override func setUp() {
+         super.setUp()
+-        inventory.registerPlugin(Plugin.self, namespace: namespace)
++        inventory.registerClass(Plugin.self)
+     }
+ 
+     func testRegister() {
+-        XCTAssertTrue(inventory.registerPlugin(Plugin.self, namespace: "xwvtest.another"))
+-        XCTAssertFalse(inventory.registerPlugin(Plugin.self, namespace: namespace))
++        XCTAssertTrue(inventory[id] === Plugin.self)
+     }
+ 
+-    func testGetClass() {
+-        XCTAssertTrue(inventory.plugin(forNamespace: namespace) === Plugin.self)
++    func testUnregister() {
++        inventory.unregisterIdentifier(id)
++        XCTAssertNil(inventory[id])
++    }
++
++    func testScan() {
++        let aid = "InventoryTest@XWebViewTests.xwebview.github.com"
++        let id = XWVInventory.identifierForClass(self.dynamicType)
++        inventory.scanInBundle(NSBundle(forClass: self.dynamicType))
++        XCTAssertTrue(inventory[id] === self.dynamicType)
++        XCTAssertTrue(inventory[aid] === self.dynamicType)
+     }
+ }
+diff --git a/XWebViewTests/XWVLoaderTest.swift b/XWebViewTests/XWVLoaderTest.swift
+index b6bbd78..6d0b723 100644
+--- a/XWebViewTests/XWVLoaderTest.swift
++++ b/XWebViewTests/XWVLoaderTest.swift
+@@ -34,12 +34,13 @@ class XWVLoaderTest: XWVTestCase {
+     }
+ 
+     func testLoading() {
++        let id = XWVInventory.identifierForClass(Plugin.self)
+         let inventory = XWVInventory()
+-        inventory.registerPlugin(Plugin.self, namespace: namespace)
++        inventory.registerClass(Plugin.self)
+         let loader = XWVLoader(inventory: inventory)
+ 
+         let desc = "loading"
+-        let script = "XWVPlugin.load('\(namespace)').then(function(o){if (o.property==123) fulfill('\(desc)');})"
++        let script = "XWVPlugin.load('\(id)', '\(namespace)').then(function(o){if (o.property==123) fulfill('\(desc)');})"
+         let expectation = expectationWithDescription(desc)
+         loadPlugin(loader, namespace: "XWVPlugin.load", script: script)
+         waitForExpectationsWithTimeout(2, handler: nil)
