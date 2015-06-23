@@ -23,14 +23,14 @@ class Echo: NSObject, XWVScripting {
         callback.call(arguments: [prefix + message], resultHandler: nil)
     }
 
-    init(prefix: AnyObject?) {
-        if prefix is String {
-            self.prefix = prefix as! String
-        } else if let num = prefix as? NSNumber {
-            self.prefix = num.stringValue
+    init(argument: AnyObject?) {
+        if let str = argument as? String {
+            prefix = str
+        } else if let num = argument as? NSNumber {
+            prefix = num.stringValue
         }
     }
     class func isSelectorForConstructor(selector: Selector) -> Bool {
-        return selector == Selector("initWithPrefix:")
+        return selector == Selector("initWithArgument:")
     }
 }

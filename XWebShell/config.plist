@@ -70,12 +70,21 @@
 		<key>ShowsVerticalIndicator</key>
 		<true/>
 	</dict>
-	<key>Plugins</key>
+	<key>Plugin</key>
 	<dict>
-		<key>SearchPath</key>
-		<string></string>
-		<key>!Hello@shell.xwebview.org</key>
-		<string>window.hello|xxx?</string>
+		<key>Bindings</key>
+		<dict>
+			<key>sample.hello</key>
+			<string>HelloWorld</string>
+			<key>sample.vibrate</key>
+			<string>Vibrate</string>
+			<key>sample.Echo</key>
+			<string>Echo</string>
+			<key>xwshell.statusBar</key>
+			<string>StatusBar!</string>
+			<key>xwshell.scroll</key>
+			<string>Scroll!</string>
+		</dict>
 	</dict>
 </dict>
 </plist>

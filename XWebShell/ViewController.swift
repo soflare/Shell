@@ -19,106 +19,102 @@ import WebKit
 import XWebView
 
 class ViewController: UIViewController, WKUIDelegate {
-    let info = NSBundle.mainBundle().infoDictionary!
     private var statusbar: StatusBar?
+
+    override var title: String? {
+        get { return "contentWebView" }
+        set {}
+    }
 
     override func loadView() {
         let rect = UIScreen.mainScreen().applicationFrame
-        let webview = WKWebView(frame: rect, configuration: WKWebViewConfiguration())
-        webview.scrollView.bounces = (info["XWSBounceScroll"] as? NSNumber)?.boolValue ?? true
-        webview.scrollView.scrollEnabled = (info["XWSScrollEnabled"] as? NSNumber)?.boolValue ?? true
-        webview.scrollView.scrollsToTop = (info["XWSScrollToTop"] as? NSNumber)?.boolValue ?? true
-        webview.scrollView.showsVerticalScrollIndicator = (info["XWSShowsVerticalScrollIndicator"] as? NSNumber)?.boolValue ?? true
-        webview.scrollView.showsHorizontalScrollIndicator = (info["XWSShowsHorizontalScrollIndicator"] as? NSNumber)?.boolValue ?? true
-        webview.scalesPageToFit = (info["XWSScalesPageToFit"] as? NSNumber)?.boolValue ?? false
+        let webView = WKWebView(frame: rect, configuration: WKWebViewConfiguration())
+        webView.UIDelegate = self
+        view = webView as UIView
+/*
+        let info = NSBundle.mainBundle().infoDictionary!
+        webview.scalesPageToFit = (info["XWSScalesPageToFit"] as? NSNumber)?.boolValue ?? false*/
         //"document.documentElement.style.webkitUserSelect='none';"
         //"document.documentElement.style.webkitTouchCallout='none';"
         // var style = document.createElement("style");
         // document.head.appendChild(style);
         // style.sheet.insertRule("* { -webkit-user-select: none; }")
         // style.sheet.insertRule("input { -webkit-user-select: auto; }")
-        webview.UIDelegate = self
-        view = webview as UIView
     }
+
     override func viewDidLoad() {
-        let webview = view as! WKWebView
-        webview.loadPlugin(Echo(prefix: nil), namespace: "sample.Echo")
-        webview.loadPlugin(HelloWorld(), namespace: "sample.hello")
-        webview.loadPlugin(Vibrate(), namespace: "sample.vibrate")
-/*
-        let inventory = XWVInventory()
-        let manifest: [String: AnyObject]
-        let plugins: [String: AnyObject]
-        if let path = NSBundle.mainBundle().pathForResource("manifest", ofType: "plist") {
-            manifest = NSDictionary(contentsOfFile: path) as! [String: AnyObject]
-            plugins = manifest["Plugins"] as? [String: AnyObject] ?? [String: AnyObject]()
-        } else {
-            manifest = [String: AnyObject]()
-            plugins = [String: AnyObject]()
-        }
-        if manifest["StatusBar"] != nil || plugins["StatusBar"] != nil {
-            statusbar = StatusBar()
-            if var namespace = plugins["StatusBar"] as? String {
-                var bindNow: Bool = true
-                if last(namespace) == "?" {
-                    namespace = dropLast(namespace)
-                    bindNow = false
-                }
-                if namespace.isEmpty {
-                    namespace = "xshell.statusBar"
-                }
-                if bindNow {
-                    webview.loadPlugin(statusbar!, namespace: namespace)
+        let webView = view as! WKWebView
+
+        statusbar = StatusBar.instance as? StatusBar
+        if let configPath = NSBundle.mainBundle().pathForResource("config", ofType: "plist"),
+            let config = NSDictionary(contentsOfFile: configPath) {
+            if let pref = config["StatusBar"] as? [String: AnyObject] {
+                statusbar?._preferences = pref
+            }
+            if let pref = config["Scroll"] as? [String: AnyObject] {
+                let scroll = Scroll(scrollView: webView.scrollView)
+                scroll._preferences = pref
+            }
+            if let plugin = config["Plugin"] as? [String: AnyObject] {
+                var modules = Set<String>()
+                let base = NSBundle.mainBundle().bundlePath
+                if let patterns = plugin["Modules"] as? [String] {
+                    var gl = glob_t();
+                    let flags = GLOB_APPEND | GLOB_NOESCAPE | GLOB_NOSORT
+                    for pattern in patterns {
+                        (base + "/" + pattern).withCString() { glob($0, flags, nil, &gl) }
+                    }
+                    var gen = UnsafeBufferPointer(start: gl.gl_pathv, count: gl.gl_pathc).generate()
+                    while let path = gen.next() {
+                        modules.insert(String.fromCString(path)!)
+                    }
+                    globfree(&gl)
                 } else {
-                    inventory.registerPlugin(StatusBar.self, namespace: namespace)
+                    modules.insert(base)
+                }
+
+                let inventory = PluginInventory()
+                var gen = modules.generate()
+                while let path = gen.next() {
+                    if let bundle = NSBundle(path: path) {
+                        inventory.scanInBundle(bundle)
+                    }
+                }
+
+                if let bindings = plugin["Bindings"] as? [String: AnyObject] {
+                    let binding = PluginBinding(inventory: inventory)
+                    binding.importFromConfig(bindings)
+                    binding.prebind(webView)
                 }
             }
-        }*/
-        webview.loadPlugin(statusbar!, namespace: "xshell.statusBar")
-        webview.loadPlugin(Scroll(scrollView: webview.scrollView), namespace: "xshell.scroll")
-/*
-        var start_url = "index.html"
-        var plugins = [String: AnyObject]() //["Extension.load"]
-        if let plistPath = NSBundle.mainBundle().pathForResource("manifest", ofType: "plist") {
-            if let manifest = NSDictionary(contentsOfFile: plistPath) {
-                start_url = manifest["start_url"] as? String ?? start_url
-                plugins = manifest["Plugins"] as? [String: AnyObject] ?? plugins
-            }
         }
-        let inventory = XWVInventory()
-        for (name, namespace) in plugins {
-            if let plugin: AnyObject = inventory.pluginClass(name) {
-                let obj = XWVInvocation.construct(plugin, initializer: "init", arguments: nil)
-                webview.loadPlugin(obj, namespace: namespace as? String ?? "")
-            }
-        }
-*/
+
         if let root = NSBundle.mainBundle().resourceURL {
             var error: NSError?
             let url = root.URLByAppendingPathComponent("index.html")
             if url.checkResourceIsReachableAndReturnError(&error) {
-                webview.loadFileURL(url, allowingReadAccessToURL: root)
+                webView.loadFileURL(url, allowingReadAccessToURL: root)
             } else {
-                webview.loadHTMLString(error!.description, baseURL: nil)
+                webView.loadHTMLString(error!.description, baseURL: nil)
             }
         }
     }
+}
 
+extension ViewController {
+    // Delegate for status bar
     override func prefersStatusBarHidden() -> Bool {
-        //return (info["UIStatusBarHidden"] as? NSNumber)?.boolValue ?? false
         return statusbar?._hidden ?? super.prefersStatusBarHidden()
     }
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-/*      if let s = info["UIStatusBarStyle"] as? String where s == "UIStatusBarStyleLightContent" {
-            return UIStatusBarStyle.LightContent
-        }
-        return UIStatusBarStyle.Default*/
         return statusbar?._style ?? super.preferredStatusBarStyle()
     }
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
         return statusbar?._animation ?? super.preferredStatusBarUpdateAnimation()
     }
+}
 
+extension ViewController {
     // UIDelegate implementation
     func webView(webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: () -> Void) {
         let dialog = ModalDialogBox(title: "", message: message, parent: self)
@@ -195,3 +191,14 @@ extension WKWebView {
         }
     }
 }
+
+/*
+short: plugin[!][?]
+namespace:
+[
+    plugin: String
+    argument: AnyObject  (meaningful for non-singleton)
+    channelName: String
+    mainThread: Bool
+    lazyBinding: Bool
+]*/

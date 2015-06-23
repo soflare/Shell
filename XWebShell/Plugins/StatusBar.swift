@@ -16,28 +16,47 @@
 
 import Foundation
 import UIKit
+import XWebView
 
-class StatusBar : NSObject {
-    private unowned let viewController: UIViewController
-    init(viewController: UIViewController) {
-        self.viewController = viewController
-        _hidden = UIApplication.sharedApplication().statusBarHidden
-        _style = UIApplication.sharedApplication().statusBarStyle
-    }
-    override convenience init() {
-        let rootViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
-        self.init(viewController: rootViewController)
+class StatusBar : NSObject, XWVSingleton {
+    private unowned let application: UIApplication
+    private unowned let rootViewController: UIViewController
+    private let applicationControlled: Bool
+
+    static var instance: NSObject = { StatusBar() }()
+    private override init() {
+        applicationControlled = (NSBundle.mainBundle().infoDictionary?["UIViewControllerBasedStatusBarAppearance"] as? NSNumber)?.boolValue == false
+        application = UIApplication.sharedApplication()
+        rootViewController = application.keyWindow!.rootViewController!
+        if applicationControlled {
+            _hidden = application.statusBarHidden
+            _style = application.statusBarStyle
+            _animation = UIStatusBarAnimation.None
+        } else {
+            _hidden = rootViewController.prefersStatusBarHidden()
+            _style = rootViewController.preferredStatusBarStyle()
+            _animation = rootViewController.preferredStatusBarUpdateAnimation()
+        }
     }
 
     var _hidden: Bool
     var hidden: Bool {
         get {
-            return _hidden
+            return applicationControlled ? application.statusBarHidden : _hidden
         }
         set {
-            if _hidden != newValue {
+            if applicationControlled {
+                application.setStatusBarHidden(newValue, withAnimation: _animation)
+            } else if _hidden != newValue {
                 _hidden = newValue
-                viewController.setNeedsStatusBarAppearanceUpdate()
+                let viewController = rootViewController.childViewControllerForStatusBarHidden() ?? rootViewController
+                if _animation == UIStatusBarAnimation.None {
+                    viewController.setNeedsStatusBarAppearanceUpdate()
+                } else {
+                    UIView.animateWithDuration(0.3) {
+                        viewController.setNeedsStatusBarAppearanceUpdate()
+                    }
+                }
             }
         }
     }
@@ -45,7 +64,7 @@ class StatusBar : NSObject {
     var _style: UIStatusBarStyle
     var style: NSString {
         get {
-            switch _style {
+            switch applicationControlled ? application.statusBarStyle : _style {
                 case UIStatusBarStyle.Default:
                     return "Dark"
                 case UIStatusBarStyle.LightContent:
@@ -64,14 +83,17 @@ class StatusBar : NSObject {
                 case "Light": s = UIStatusBarStyle.LightContent
                 default: s = _style
             }
-            if _style != s {
+            if applicationControlled {
+               application.statusBarStyle = s
+            } else if _style != s {
                 _style = s
+                let viewController = rootViewController.childViewControllerForStatusBarStyle() ?? rootViewController
                 viewController.setNeedsStatusBarAppearanceUpdate()
             }
         }
     }
 
-    var _animation: UIStatusBarAnimation = UIStatusBarAnimation.Fade
+    var _animation: UIStatusBarAnimation
     var animation: NSString {
         get {
             switch _animation {

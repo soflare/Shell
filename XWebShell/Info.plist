@@ -2,18 +2,19 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>XWSBounceScroll</key>
-	<false/>
-	<key>XWSScalesPageToFit</key>
-	<false/>
-	<key>XWSScrollsToTop</key>
-	<true/>
-	<key>XWSScrollEnabled</key>
-	<true/>
-	<key>XWSShowsHorizontalScrollIndicator</key>
-	<true/>
-	<key>XWSShowsVerticalScrollIndicator</key>
-	<true/>
+	<key>XWVPlugins</key>
+	<dict>
+		<key>StatusBar</key>
+		<string></string>
+		<key>Scroll</key>
+		<string></string>
+		<key>HelloWorld</key>
+		<string></string>
+		<key>Echo</key>
+		<string></string>
+		<key>Vibrate</key>
+		<string></string>
+	</dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>

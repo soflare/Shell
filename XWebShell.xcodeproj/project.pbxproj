@@ -16,10 +16,12 @@
 		EE2F48701AE0E7D70088AF67 /* HelloWorld.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE2F486F1AE0E7D70088AF67 /* HelloWorld.swift */; };
 		EE2F48721AE0E8540088AF67 /* Vibrate.m in Sources */ = {isa = PBXBuildFile; fileRef = EE2F48711AE0E8540088AF67 /* Vibrate.m */; };
 		EE2F48751AE0EAE70088AF67 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = EE2F48741AE0EAE70088AF67 /* index.html */; };
+		EE451F2D1B3B2E790067805D /* PluginInventory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE451F2C1B3B2E780067805D /* PluginInventory.swift */; };
+		EE451F3A1B3EA0830067805D /* PluginBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE451F391B3EA0830067805D /* PluginBinding.swift */; };
 		EE73B3031B144E4A00B5A342 /* Scroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE73B3021B144E4A00B5A342 /* Scroll.swift */; };
 		EEBA16DE1B03CE1600963E7A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EEBA16DD1B03CE1600963E7A /* Default-568h@2x.png */; };
 		EEBA16E31B0A45B700963E7A /* ModalDialogBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA16E21B0A45B700963E7A /* ModalDialogBox.swift */; };
-		EEBA16E91B0BACD100963E7A /* manifest.plist in Resources */ = {isa = PBXBuildFile; fileRef = EEBA16E81B0BACD100963E7A /* manifest.plist */; };
+		EEBA16E91B0BACD100963E7A /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = EEBA16E81B0BACD100963E7A /* config.plist */; };
 		EEBA16ED1B137B7F00963E7A /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEBA16EC1B137B7F00963E7A /* StatusBar.swift */; };
 /* End PBXBuildFile section */
 
@@ -67,10 +69,12 @@
 		EE2F48741AE0EAE70088AF67 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = index.html; path = XWebShell/index.html; sourceTree = "<group>"; };
 		EE2F48761AE0F1FC0088AF67 /* Vibrate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Vibrate.h; sourceTree = "<group>"; };
 		EE2F48771AE0F2F10088AF67 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = BridgingHeader.h; path = XWebShell/BridgingHeader.h; sourceTree = "<group>"; };
+		EE451F2C1B3B2E780067805D /* PluginInventory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PluginInventory.swift; path = XWebShell/PluginInventory.swift; sourceTree = "<group>"; };
+		EE451F391B3EA0830067805D /* PluginBinding.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PluginBinding.swift; path = XWebShell/PluginBinding.swift; sourceTree = "<group>"; };
 		EE73B3021B144E4A00B5A342 /* Scroll.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scroll.swift; sourceTree = "<group>"; };
 		EEBA16DD1B03CE1600963E7A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "XWebShell/Default-568h@2x.png"; sourceTree = "<group>"; };
 		EEBA16E21B0A45B700963E7A /* ModalDialogBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ModalDialogBox.swift; path = XWebShell/ModalDialogBox.swift; sourceTree = "<group>"; };
-		EEBA16E81B0BACD100963E7A /* manifest.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = manifest.plist; path = XWebShell/manifest.plist; sourceTree = "<group>"; };
+		EEBA16E81B0BACD100963E7A /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = config.plist; path = XWebShell/config.plist; sourceTree = "<group>"; };
 		EEBA16EC1B137B7F00963E7A /* StatusBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		EEEF22541AE65654009582E1 /* XWebView.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = XWebView.xcodeproj; path = XWebView/XWebView.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +100,8 @@
 				ABE516A21A00ADDE0025A92E /* AppDelegate.swift */,
 				ABE516A81A00ADDE0025A92E /* Images.xcassets */,
 				ABE516A91A00ADDE0025A92E /* ViewController.swift */,
+				EE451F391B3EA0830067805D /* PluginBinding.swift */,
+				EE451F2C1B3B2E780067805D /* PluginInventory.swift */,
 				EEBA16E21B0A45B700963E7A /* ModalDialogBox.swift */,
 				EE2F48731AE0E88A0088AF67 /* Plugins */,
 				AB603B9B19EA58CB00DECF78 /* Supporting Files */,
@@ -117,7 +123,7 @@
 				EEBA16DD1B03CE1600963E7A /* Default-568h@2x.png */,
 				EE2F48741AE0EAE70088AF67 /* index.html */,
 				ABE516B31A00AEE60025A92E /* Info.plist */,
-				EEBA16E81B0BACD100963E7A /* manifest.plist */,
+				EEBA16E81B0BACD100963E7A /* config.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -229,7 +235,7 @@
 				EE2F48751AE0EAE70088AF67 /* index.html in Resources */,
 				ABE516AD1A00ADDE0025A92E /* Images.xcassets in Resources */,
 				EEBA16DE1B03CE1600963E7A /* Default-568h@2x.png in Resources */,
-				EEBA16E91B0BACD100963E7A /* manifest.plist in Resources */,
+				EEBA16E91B0BACD100963E7A /* config.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,9 +250,11 @@
 				EE2F48721AE0E8540088AF67 /* Vibrate.m in Sources */,
 				EEBA16E31B0A45B700963E7A /* ModalDialogBox.swift in Sources */,
 				EE2F486E1AE0E6D70088AF67 /* Echo.swift in Sources */,
+				EE451F2D1B3B2E790067805D /* PluginInventory.swift in Sources */,
 				ABE516AE1A00ADDE0025A92E /* ViewController.swift in Sources */,
 				ABE516AA1A00ADDE0025A92E /* AppDelegate.swift in Sources */,
 				EE2F48701AE0E7D70088AF67 /* HelloWorld.swift in Sources */,
+				EE451F3A1B3EA0830067805D /* PluginBinding.swift in Sources */,
 				EE73B3031B144E4A00B5A342 /* Scroll.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

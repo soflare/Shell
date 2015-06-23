@@ -15,10 +15,9 @@
 */
 
 import UIKit
-import XWebView
 
-class HelloWorld : NSObject {
-    func show(text: AnyObject?) {
+class HelloWorld {
+    @objc class func show(text: AnyObject?) {
         let title = text as? String
         dispatch_async(dispatch_get_main_queue()) {
             let alert = UIAlertView(title: title, message: "(from XWebView)", delegate: nil, cancelButtonTitle: "OK")

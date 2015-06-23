@@ -20,12 +20,39 @@ import WebKit
 
 class Scroll : NSObject {
     private unowned let scrollView: UIScrollView
+
     init(scrollView: UIScrollView) {
         self.scrollView = scrollView
     }
-    override convenience init() {
-        let rootViewController = UIApplication.sharedApplication().keyWindow!.rootViewController!
-        self.init(scrollView: (rootViewController.view as! WKWebView).scrollView)
+
+    convenience init?(argument: AnyObject?) {
+        let rootView = UIApplication.sharedApplication().keyWindow!.rootViewController!.view
+        var scrollView: UIScrollView?
+        if let tag = (argument as? NSNumber)?.integerValue {
+            // try to find view by tag
+            let view = rootView.viewWithTag(tag)
+            if let view = view as? UIScrollView {
+                scrollView = view
+            } else if let view = view as? WKWebView {
+                scrollView = view.scrollView
+            }
+        } else {
+            // try to find view by title of controller
+            let title = argument as? String ?? ""
+            var views: [AnyObject] = [ rootView ]
+            do {
+                let view = views.removeAtIndex(0) as! UIView
+                views.extend(view.subviews)
+                if title.isEmpty || (view.nextResponder() as? UIViewController)?.title == title {
+                    scrollView = (view as? WKWebView)?.scrollView
+                }
+            } while views.count > 0 && scrollView == nil
+        }
+        if scrollView == nil {
+            self.init(scrollView: UIScrollView(frame: CGRect.zeroRect))
+            return nil
+        }
+        self.init(scrollView: scrollView!)
     }
 
     var bouncy: Bool {

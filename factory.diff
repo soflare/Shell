@@ -1,0 +1,76 @@
+commit 12e921219467581693e956a1cda21e315c5df418
+Author: Zhenyu Liang <xwebview@sofla.re>
+Date:   Fri Jun 26 03:19:31 2015 +0800
+
+    WIP
+
+diff --git a/XWebView.xcodeproj/project.pbxproj b/XWebView.xcodeproj/project.pbxproj
+index 2a541aa..f492fc3 100644
+--- a/XWebView.xcodeproj/project.pbxproj
++++ b/XWebView.xcodeproj/project.pbxproj
+@@ -28,6 +28,7 @@
+ 		EE3379391AE2E298009124A4 /* XWVTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE3379381AE2E298009124A4 /* XWVTestCase.swift */; };
+ 		EE33793E1AE56875009124A4 /* XWVScriptObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE33793D1AE56875009124A4 /* XWVScriptObject.swift */; };
+ 		EE3379401AE57566009124A4 /* XWVScriptingTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE33793F1AE57566009124A4 /* XWVScriptingTest.swift */; };
++		EE451F321B3C65DC0067805D /* XWVFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE451F311B3C65DC0067805D /* XWVFactory.swift */; };
+ 		EE62692419FA52FC00EFC3F8 /* XWVInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = EE62691E19FA52FC00EFC3F8 /* XWVInvocation.m */; };
+ 		EE62692619FA52FC00EFC3F8 /* XWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE62692019FA52FC00EFC3F8 /* XWebView.swift */; };
+ 		EE71648F1A716C9F00078FF9 /* XWVHttpConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = EE71648B1A716C9F00078FF9 /* XWVHttpConnection.h */; };
+@@ -86,6 +87,7 @@
+ 		EE3379381AE2E298009124A4 /* XWVTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVTestCase.swift; sourceTree = "<group>"; };
+ 		EE33793D1AE56875009124A4 /* XWVScriptObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVScriptObject.swift; path = XWebView/XWVScriptObject.swift; sourceTree = "<group>"; };
+ 		EE33793F1AE57566009124A4 /* XWVScriptingTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XWVScriptingTest.swift; sourceTree = "<group>"; };
++		EE451F311B3C65DC0067805D /* XWVFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = XWVFactory.swift; path = XWebView/XWVFactory.swift; sourceTree = "<group>"; };
+ 		EE62683519FA323900EFC3F8 /* XWebView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = XWebView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+ 		EE62691319FA52D100EFC3F8 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = XWebView/Info.plist; sourceTree = "<group>"; };
+ 		EE62691C19FA52FC00EFC3F8 /* XWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XWebView.h; path = XWebView/XWebView.h; sourceTree = "<group>"; };
+@@ -191,6 +193,7 @@
+ 				EE33793D1AE56875009124A4 /* XWVScriptObject.swift */,
+ 				EEE6F9A71AE02F5000A2EC89 /* XWVScriptPlugin.swift */,
+ 				EE62683819FA323900EFC3F8 /* Supporting Files */,
++				EE451F311B3C65DC0067805D /* XWVFactory.swift */,
+ 			);
+ 			name = XWebView;
+ 			sourceTree = SOURCE_ROOT;
+@@ -341,6 +344,7 @@
+ 				EE0A1DE01A52A5A300C9E6D3 /* XWVStubGenerator.swift in Sources */,
+ 				EE174E451A01FDDE00168D96 /* XWVInventory.swift in Sources */,
+ 				EEE6F9A81AE02F5000A2EC89 /* XWVScriptPlugin.swift in Sources */,
++				EE451F321B3C65DC0067805D /* XWVFactory.swift in Sources */,
+ 				EE7164921A716C9F00078FF9 /* XWVHttpServer.m in Sources */,
+ 				EEE6F9A61AE02E8600A2EC89 /* XWVObject.swift in Sources */,
+ 				EE62692419FA52FC00EFC3F8 /* XWVInvocation.m in Sources */,
+diff --git a/XWebView/XWVFactory.swift b/XWebView/XWVFactory.swift
+new file mode 100644
+index 0000000..b606061
+--- /dev/null
++++ b/XWebView/XWVFactory.swift
+@@ -0,0 +1,28 @@
++/*
++ Copyright 2015 XWebView
++
++ Licensed under the Apache License, Version 2.0 (the "License");
++ you may not use this file except in compliance with the License.
++ You may obtain a copy of the License at
++
++ http://www.apache.org/licenses/LICENSE-2.0
++
++ Unless required by applicable law or agreed to in writing, software
++ distributed under the License is distributed on an "AS IS" BASIS,
++ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ See the License for the specific language governing permissions and
++ limitations under the License.
++*/
++
++import Foundation
++
++@objc public protocol XWVFactory {
++    static func createInstance() -> NSObject!
++    optional static func createInstanceWithArgument(argument: AnyObject!) -> NSObject!
++}
++
++@objc public protocol XWVSingleton {
++    static var instance: NSObject! { get }
++    optional static var channelName: String { get }
++    optional static var stickOnMainThread: Bool { get }
++}
